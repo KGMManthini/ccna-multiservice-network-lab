@@ -1,0 +1,56 @@
+Router>enable
+Router#configure terminal
+Router(config)#hostname R-04
+
+R-04(config)#interface gigabitethernet 0/0/0
+R-04(config-if)#description SW-06-link
+R-04(config-if)#ip helper-address 172.16.0.3
+R-04(config-if)#ip address 172.16.3.129 255.255.255.192
+R-04(config-if)#no shutdown
+R-04(config-if)#exit
+
+R-04(config)#interface gigabitethernet 0/0/1
+R-04(config-if)#description SW-07-link
+R-04(config-if)#ip helper-address 172.16.0.3
+R-04(config-if)#ip address 172.16.3.1 255.255.255.128
+R-04(config-if)#no shutdown
+R-04(config-if)#exit
+
+R-04(config)#interface serial 0/2/0
+R-04(config-if)#description R-02-link
+R-04(config-if)#ip address 172.16.4.170 255.255.255.252
+R-04(config-if)#no shutdown
+R-04(config-if)#exit
+
+R-04(config)#interface serial 0/2/1
+R-04(config-if)#description ISP-link
+R-04(config-if)#ip address 100.10.20.2 255.255.255.252
+R-04(config-if)#no shutdown
+R-04(config-if)#exit
+
+R-04(config)#router ospf 10
+R-04(config-router)#router-id 4.4.4.4
+R-04(config-router)#passive-interface g0/0/0
+R-04(config-router)#passive-interface g0/0/1
+R-04(config-router)#network 172.16.3.0 0.0.0.127 area 0
+R-04(config-router)#network 172.16.3.128 0.0.0.63 area 0
+R-04(config-router)#network 172.16.4.168 0.0.0.3 area 0
+R-04(config-router)#exit
+
+R-04(config)#ip route 0.0.0.0 0.0.0.0 100.10.20.1
+
+R-04(config)#interface gigabitethernet 0/0/0
+R-04(config-if)#ip nat inside
+R-04(config-if)#exit
+
+R-04(config)#interface gigabitethernet 0/0/1
+R-04(config-if)#ip nat inside
+R-04(config-if)#exit
+
+R-04(config)#interface serial 0/2/0
+R-04(config-if)#ip nat inside
+R-04(config-if)#exit
+
+R-04(config)#interface gigabitethernet 0/2/1
+R-04(config-if)#ip nat outside
+R-04(config-if)#exit

@@ -1,0 +1,56 @@
+Router>enable
+Router#configure terminal
+Router(config)#hostname R-03
+
+R-03(config)#interface gigabitethernet 0/0/0
+R-03(config-if)#description SW-04-vlan-link
+R-03(config-if)#no shutdown
+R-03(config-if)#exit
+
+R-03(config)#interface gigabitethernet 0/0/0.1
+R-03(config-subif)#description SW-04-vlan-02-link
+R-03(config-subif)#encapsulation dot1q 2
+R-03(config-subif)#ip helper-address 172.16.0.3
+R-03(config-subif)#ip address 172.16.4.1 255.255.255.192
+R-03(config-subif)#no shutdown
+R-03(config-subif)#exit
+
+R-03(config)#interface gigabitethernet 0/0/0.2
+R-03(config-subif)#description SW-04-vlan-03-link
+R-03(config-subif)#encapsulation dot1q 3
+R-03(config-subif)#ip helper-address 172.16.0.3
+R-03(config-subif)#ip address 172.16.4.97 255.255.255.224
+R-03(config-subif)#no shutdown
+R-03(config-subif)#exit
+
+R-03(config)#interface gigabitethernet 0/0/0.3
+R-03(config-subif)#description SW-04-vlan-04-link
+R-03(config-subif)#encapsulation dot1q 4
+R-03(config-subif)#ip helper-address 172.16.0.3
+R-03(config-subif)#ip address 172.16.4.129 255.255.255.224
+R-03(config-subif)#no shutdown
+R-03(config-subif)#exit
+
+R-03(config)#interface gigabitethernet 0/0/1
+R-03(config-if)#description SW-05-link
+R-03(config-if)#ip helper-address 172.16.0.3
+R-03(config-if)#ip address 172.16.2.129 255.255.255.128
+R-03(config-if)#no shutdown
+R-03(config-if)#exit
+
+R-03(config)#interface serial 0/1/1
+R-03(config-if)#description R-02-link
+R-03(config-if)#ip address 172.16.4.166 255.255.255.252
+R-03(config-if)#no shutdown
+R-03(config-if)#exit
+
+R-03(config)#router ospf 10
+R-03(config-router)#router-id 3.3.3.3
+R-03(config-router)#passive-interface g0/0/0
+R-03(config-router)#passive-interface g0/0/1
+R-03(config-router)#network 172.16.2.128 0.0.0.127 area 0
+R-03(config-router)#network 172.16.4.0 0.0.0.63 area 0
+R-03(config-router)#network 172.16.4.96 0.0.0.31 area 0
+R-03(config-router)#network 172.16.4.128 0.0.0.31 area 0
+R-03(config-router)#network 172.16.4.164 0.0.0.3 area 0
+R-03(config-router)#exit

@@ -1,0 +1,32 @@
+Router>enable
+Router#configure terminal
+Router(config)#hostname R-01
+
+R-01(config)#interface gigabitethernet 0/0/0
+R-01(config-if)#description SW-01-link
+R-01(config-if)#ip helper-address 172.16.0.3
+R-01(config-if)#ip address 172.16.1.1 255.255.255.0
+R-01(config-if)#no shutdown
+R-01(config-if)#exit
+
+R-01(config)#interface gigabitethernet 0/0/1
+R-01(config-if)#description SW-02-link
+R-01(config-if)#ip helper-address 172.16.0.3
+R-01(config-if)#ip address 172.16.4.65 255.255.255.224
+R-01(config-if)#no shutdown
+R-01(config-if)#exit
+
+R-01(config)#interface serial 0/1/0
+R-01(config-if)#description R-02-link
+R-01(config-if)#ip address 172.16.4.162 255.255.255.252
+R-01(config-if)#no shutdown
+R-01(config-if)#exit
+
+R-01(config)#router ospf 10
+R-01(config-router)#router-id 1.1.1.1
+R-01(config-router)#passive-interface g0/0/0
+R-01(config-router)#passive-interface g0/0/1
+R-01(config-router)#network 172.16.1.0 0.0.0.255 area 0
+R-01(config-router)#network 172.16.4.64 0.0.0.31 area 0
+R-01(config-router)#network 172.16.4.160 0.0.0.3 area 0
+R-01(config-router)#exit
